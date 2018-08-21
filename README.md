@@ -10,8 +10,14 @@ Science!
 
 Symlink suBLAM.py into your sublime packages directory:
 
-
 ```bash
 cd /this/repo/dir
 ln -s `pwd`/suBLAM.py $HOME/.config/sublime-text-3/Packages/User/suBLAM.py
+```
+
+Go to *Preferences->KeyBindings* and add a user keyboard shortcut to show the
+schema. Something like:
+
+```
+{ "keys": ["ctrl+alt+s"], "command": "rails_schema" }
 ```
