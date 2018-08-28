@@ -14,6 +14,30 @@ import sublime_plugin
 import os
 import re
 
+class RailsSelectTableCommand(sublime_plugin.WindowCommand):
+    def run(self):
+        self._schema = SchemaFinder(
+            sublime.active_window().active_view().file_name()
+        ).perform()
+
+        sublime.active_window().show_quick_panel(
+            self._schema.all_table_names(),
+            self._table_selected
+        )
+
+    def _table_selected(self, table_index):
+        self._show_table(self._schema.all_table_names()[table_index])
+
+    def _show_table(self, table_name):
+        content = self._schema.schema_for(table_name)
+        to_render = SchemaRenderer(content).perform()
+        sublime.active_window().active_view().show_popup(
+            to_render,
+            max_width = 1000,
+            max_height = 1000
+        )
+
+
 class RailsSchemaCommand(sublime_plugin.WindowCommand):
     def run(self):
         table_name = TableNameImplier(
@@ -75,6 +99,9 @@ class SchemaFile(object):
         return re.search(
             r'create_table "' + table_name + '".*?end', self._schema_content, re.DOTALL
         ).group(0)
+
+    def all_table_names(self):
+        return re.findall(r'create_table "(.*?)"', self._schema_content)
 
 
 class TableNameImplier(object):
