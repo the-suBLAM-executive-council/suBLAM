@@ -6,6 +6,8 @@ Science!
 
 ![suBLAM](screenshots/suBLAM.png "Science!")
 
+![suBLAM2](screenshots/suBLAM2.png "Insinuating!")
+
 ## Installation
 
 Symlink suBLAM.py into your sublime packages directory:
@@ -20,4 +22,5 @@ schema. Something like:
 
 ```
 { "keys": ["ctrl+alt+s"], "command": "rails_schema" }
+{ "keys": ["ctrl+alt+x"], "command": "rails_select_table" }
 ```
