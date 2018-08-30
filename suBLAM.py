@@ -46,6 +46,10 @@ class RailsSchemaCommand(sublime_plugin.WindowCommand):
 
         schema = self._get_schema_for(table_name)
 
+        if schema == None:
+            sublime.active_window().run_command('rails_select_table')
+            return None
+
         sublime.active_window().active_view().show_popup(
             self._process_schema_for_popup(schema),
             max_width = 1000,
@@ -96,9 +100,12 @@ class SchemaFile(object):
         self._schema_content = open(schema_path).read()
 
     def schema_for(self, table_name):
-        return re.search(
+        table_schema = re.search(
             r'create_table "' + table_name + '".*?end', self._schema_content, re.DOTALL
-        ).group(0)
+        )
+
+        if table_schema:
+            return table_schema.group(0)
 
     def all_table_names(self):
         return re.findall(r'create_table "(.*?)"', self._schema_content)
